@@ -1,0 +1,94 @@
+{
+  "tests": [
+    {
+      "name": "read_data(): loads data as a dataframe, not tibble",
+      "setup": "awk -F '\t' '$1 == 1 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
+      "run": "awk -F '\t' '$1 == 1 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "read_data(): returns the correct number of dimensions",
+      "setup": "awk -F '\t' '$1 == 2 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
+      "run": "awk -F '\t' '$1 == 2 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "calculate_variance(): correctly accesses the sdev values, squares them, and divides each by the sum",
+      "setup": "awk -F '\t' '$1 == 3 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
+      "run": "awk -F '\t' '$1 == 3 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "make_variance_tibble(): returns a tibble of the concatenated results",
+      "setup": "awk -F '\t' '$1 == 4 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
+      "run": "awk -F '\t' '$1 == 4 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "make_variance_tibble(): returns a tibble with the correct dimensions from the input",
+      "setup": "awk -F '\t' '$1 == 5 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
+      "run": "awk -F '\t' '$1 == 5 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "make_variance_tibble(): returns a column entitled cumulative with the cumulative sum",
+      "setup": "awk -F '\t' '$1 == 6 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
+      "run": "awk -F '\t' '$1 == 6 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "list_significant_probes(): correctly filters out values according to padj < threshold",
+      "setup": "awk -F '\t' '$1 == 7 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
+      "run": "awk -F '\t' '$1 == 7 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "return_de_intensity(): returns a matrix",
+      "setup": "awk -F '\t' '$1 == 8 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
+      "run": "awk -F '\t' '$1 == 8 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "return_de_intensity(): returns the correct values based on the filtering",
+      "setup": "awk -F '\t' '$1 == 9 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
+      "run": "awk -F '\t' '$1 == 9 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 10,
+      "points": 1
+    }
+  ]
+}
