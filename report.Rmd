@@ -40,7 +40,8 @@ __Write a function, `read_data`, that reads in the example_intensity_data.csv as
 a *dataframe*. Return the first two rows of the dataframe below__:
 
 ```{r code block to read data}
-intensity <- read_data('data/example_intensity_data.csv', ',')
+intensity <- read_data('data/example_intensity_data.csv', '')
+  # delimiter changed from ',' to '' to match csv file.
 head(intensity, 2)
 ```
 ### Background on PCA 
@@ -120,9 +121,9 @@ figures. Until you've completed all the parts, you may safely leave these
 captions blank.
 
 ```{r code block to create descriptive captions}
-caption_4 <- 'Descriptive Caption for part 4 here'
-caption_5 <- 'Descriptive Caption for part 5 here'
-caption_8 <- 'Descriptive Caption for part 8 here'
+caption_4 <- 'Proportion of variance is explained by each principal component (PC), and cumulative variance is explained across all PCs. Bars correspond to the variance explained by each PC. The red points and connecting line represent the cumulative variance explained across all PCs. The PCs are ordered from highest to lowest variance explained, which shows how many PCs are needed to capture the majority of variation in the dataset.'
+caption_5 <- 'PC analysis biplot showing sample separation along PC1 and PC2. Points correspond to samples from the microarray dataset, and their positions are determined by their PCA scores. The color of each point depends on its SixSubtTypesClassification from the sample metadata. The first two PCs capture the largest sources of variance in the expression data, and illustrates the similarity or separation among samples.'
+caption_8 <- 'Heatmap of normalized intensity values for significantly differentially expressed probes where padj < 0.01. Rows represent probes and columns represent samples from the microarray experiment. Rows and columns are clustered by similarity. The colors show the relative expression levels, with red indicating higher normalized intensity and blue indication lower normalized intensity. Hierarchical clustering to probes and samples allow for the grouping of similar expression patterns.'
 ```
 
 ## 4. Plot the variance explained and cumulative variance for the PCs
@@ -142,6 +143,34 @@ numeric ordering.
 ```{r code block to plot variance explained and cumulative variance explained, fig.cap = caption_4}
 #Create a ggplot2 with the plot described above, refer to the reference report
 
+# Make sure PCs appear in numeric order instead of alphabetical.
+variance_tibble$principal_components <- factor(
+  variance_tibble$principal_components,
+  levels = variance_tibble$principal_components
+)
+
+# Create plot showing variance explained by each PC and cumulative variance.
+ggplot(variance_tibble, aes(x = principal_components)) +
+  
+  # Bar plot of variance explained by each PC.
+  geom_col(aes(y = variance_explained), fill = "steelblue") +
+  
+  # Points showing cumulative variance explained.
+  geom_point(aes(y = cumulative, group = 1), color = "red") +
+  
+  # Line connecting cumultive variance points.
+  geom_line(aes(y = cumulative, group = 1), color = "red") +
+  
+  # Axis labels and title, theme
+  labs(
+    x = "Principal Component",
+    y = "Proportion of Variance Explained",
+    title = "Variance explained and cumulative variance across principal components"
+  ) +
+  theme_minimal() +
+  
+  # Rotate PC labels so they don't overlap.
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 

@@ -17,6 +17,8 @@ read_data <- function(intensity_data, delimiter) {
       file = intensity_data,
       sep = delimiter,
       header = TRUE,
+      row.names = 1,  # Make the probe ID column the row names.
+      check.names = FALSE,  # Keep probe ID names as they appear.
       stringsAsFactors = FALSE
     )
     return(df)
@@ -85,11 +87,11 @@ make_biplot <- function(metadata, pca_results) {
     
     # Bring in the metadata.
     metadata_df <- read.csv(metadata, stringsAsFactors = FALSE)
-    plot_df <- bind_cols(pca_df, metadata_df)
+    plot_df <- left_join(pca_df, metadata_df, by = c("SampleID" = "geo_accession"))
     
     # Plot PC1 vs PC2.
     # Map SixSubTypesClassification to color.
-    pc_plot <- ggplot(plot_df, aes(x = PC1, y = PC2, color = SixSubTypesClassification)) +
+    pc_plot <- ggplot(plot_df, aes(x = PC1, y = PC2, color = SixSubtypesClassification)) +
       geom_point() + 
       labs(
         x = "PC1",
@@ -168,8 +170,5 @@ plot_heatmap <- function(de_intensity, num_colors, palette) {
       de_intensity,
       col = heatmap_colors
     )
-  
-    # Return the heatmap result.
-    return(hm)
 }
 
