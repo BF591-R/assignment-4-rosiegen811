@@ -40,7 +40,7 @@ __Write a function, `read_data`, that reads in the example_intensity_data.csv as
 a *dataframe*. Return the first two rows of the dataframe below__:
 
 ```{r code block to read data}
-intensity <- read_data('data/example_intensity_data.csv', ' ')
+intensity <- read_data('data/example_intensity_data.csv', ',')
 head(intensity, 2)
 ```
 ### Background on PCA 

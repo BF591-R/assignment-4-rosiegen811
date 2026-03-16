@@ -3,7 +3,7 @@ library('RColorBrewer')
 
 #' Read the expression data "csv" file as a dataframe, not tibble
 #'
-#' @param filename (str): the path of the file to read
+#' @param filename (str): the path of the file to read (intensity_data)
 #' @param delimiter (str): generalize the function so it can read in data with
 #'   your choice of delimiter
 #'
@@ -13,7 +13,13 @@ library('RColorBrewer')
 #'
 #' @examples
 read_data <- function(intensity_data, delimiter) {
-    return(NULL)
+    df <- read.table(
+      file = intensity_data,
+      sep = delimiter,
+      header = TRUE,
+      stringsAsFactors = FALSE
+    )
+    return(df)
 }
 
 #' Define a function to calculate the proportion of variance explained by each PC
@@ -25,7 +31,11 @@ read_data <- function(intensity_data, delimiter) {
 #'
 #' @examples
 calculate_variance_explained <- function(pca_results) {
-    return(NULL)
+  
+    # Formula: Variance explained by each PC = (PC's SD)^2 / Total variance
+    var_explained <- (pca_results$sdev^2) / sum(pca_results$sdev^2)
+  
+    return(var_explained)
 }
 
 #' Define a function that takes in the variance values and the PCA results to
@@ -43,10 +53,17 @@ calculate_variance_explained <- function(pca_results) {
 #' @export
 #' @examples 
 make_variance_tibble <- function(pca_ve, pca_results) {
-    return(NULL)
+  
+    # Create a tibble by columns.
+    var_tibble <- tibble(
+      # Generate PC names based on the length of pca_ve.
+      principal_components = paste0("PC", seq_along(pca_ve)),
+      variance_explained = pca_ve,
+      cumulative = cumsum(pca_ve)
+    )
+    
+    return(var_tibble)
 }
-
-
 
 #' Define a function to create a biplot of PC1 vs. PC2 labeled by
 #' SixSubTypesClassification
@@ -60,7 +77,27 @@ make_variance_tibble <- function(pca_ve, pca_results) {
 #'
 #' @examples
 make_biplot <- function(metadata, pca_results) {
-    return(NULL)
+    # Get the PC coordinates from pca_results.
+    sample_coords <-  pca_results$x
+  
+    # Turn PC coordinates into a data frame.
+    pca_df <- as_tibble(sample_coords, rownames = "SampleID")
+    
+    # Bring in the metadata.
+    metadata_df <- read.csv(metadata, stringsAsFactors = FALSE)
+    plot_df <- bind_cols(pca_df, metadata_df)
+    
+    # Plot PC1 vs PC2.
+    # Map SixSubTypesClassification to color.
+    pc_plot <- ggplot(plot_df, aes(x = PC1, y = PC2, color = SixSubTypesClassification)) +
+      geom_point() + 
+      labs(
+        x = "PC1",
+        y = "PC2",
+        color = "SixSubTypesClassification"
+      )
+    
+    return(pc_plot)
 }
 
 #' Define a function to return a list of probeids filtered by signifiance
@@ -74,7 +111,15 @@ make_biplot <- function(metadata, pca_results) {
 #'
 #' @examples
 list_significant_probes <- function(diff_exp_tibble, fdr_threshold) {
-    return(NULL)
+    
+    sig_probes <- diff_exp_tibble |> 
+      # Filter rows where padj < fdr_threshold.
+      filter(padj < fdr_threshold) |> 
+      
+      # Extract the probe IDs.
+      pull(probeid)
+
+    return(sig_probes)
 }
 
 #' Define a function that uses the list of significant probeids to return a
@@ -91,7 +136,12 @@ list_significant_probes <- function(diff_exp_tibble, fdr_threshold) {
 #'
 #' @examples
 return_de_intensity <- function(intensity, sig_ids_list) {
-    return(NULL)
+    # Select the rows whose names match the significant probe IDs.
+      # Keep the subset 2D even if there's one row.
+    de_intensity <- intensity[sig_ids_list, , drop = FALSE]
+    
+    # Return a matrix of the probe intensities.
+    return(as.matrix(de_intensity))
 }
 
 #' Define a function that takes the intensity values for significant probes and
@@ -109,6 +159,17 @@ return_de_intensity <- function(intensity, sig_ids_list) {
 #'
 #' @examples
 plot_heatmap <- function(de_intensity, num_colors, palette) {
-    return(NULL)
+  
+    # Make a vector of colors.
+    heatmap_colors <-  brewer.pal(num_colors, palette)
+  
+    # Pass the matrix into heatmap().
+    hm <- heatmap(
+      de_intensity,
+      col = heatmap_colors
+    )
+  
+    # Return the heatmap result.
+    return(hm)
 }
 

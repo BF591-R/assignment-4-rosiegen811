@@ -29,7 +29,7 @@ A microarray consists of thousands of specifically designed single stranded DNA
 sequences affixed or bound to a solid surface (glass, nylon, etc.). Extracted RNA
  or DNA from samples of interest are labeled with fluorescent dyes, and hybridized 
 with the bound probes by flowing across the surface. Non-hybridized molecules are 
-washed away and b a laser will excite the attached dye to produce light to be detected
+washed away and a laser will excite the attached dye to produce light to be detected
 by a scanner and converted to a digital image. Finally, image processing will 
 transform each spot (bound probe) to a numerical measurement that can be used to 
 infer expression levels for genes.
